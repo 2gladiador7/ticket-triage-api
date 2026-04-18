@@ -14,6 +14,16 @@ from pydantic import BaseModel
 # ---------------------------------------------------------------------------
 
 app = FastAPI(title="Ticket Triage API", version="1.0.0")
+
+
+@app.on_event("startup")
+async def startup():
+    import os
+    print("=== ENV DEBUG ===")
+    print(f"API_KEY present: {bool(os.environ.get('API_KEY'))}")
+    print(f"ANTHROPIC_API_KEY present: {bool(os.environ.get('ANTHROPIC_API_KEY'))}")
+    print(f"All env keys: {[k for k in os.environ.keys()]}")
+    print("=================")
 security = HTTPBearer(auto_error=False)
 claude = anthropic.Anthropic()  # reads ANTHROPIC_API_KEY from env
 
