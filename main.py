@@ -89,7 +89,7 @@ async def validation_error_handler(request, exc):
 def require_api_key(
     credentials: Optional[HTTPAuthorizationCredentials] = Security(security),
 ) -> None:
-    api_key = os.environ.get("API_KEY", "")
+    api_key = os.environ.get("API_KEY", "").strip().strip('"').strip("'")
     if not api_key:
         raise HTTPException(status_code=500, detail="API_KEY is not configured on the server")
     if credentials is None or credentials.credentials != api_key:
