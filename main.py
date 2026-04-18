@@ -103,6 +103,16 @@ def require_api_key(
 # Route
 # ---------------------------------------------------------------------------
 
+@app.get("/debug-env")
+def debug_env():
+    return {
+        "API_KEY_set": bool(os.environ.get("API_KEY")),
+        "API_KEY_len": len(os.environ.get("API_KEY", "")),
+        "API_KEY_repr": repr(os.environ.get("API_KEY", "")),
+        "ANTHROPIC_set": bool(os.environ.get("ANTHROPIC_API_KEY")),
+    }
+
+
 @app.post("/triage", response_model=TriageResponse)
 def triage(body: TriageRequest, _: None = Depends(require_api_key)):
     """Classify and prioritise a support ticket using Claude Haiku."""
